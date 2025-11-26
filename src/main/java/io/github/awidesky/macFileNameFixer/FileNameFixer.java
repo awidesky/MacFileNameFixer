@@ -38,17 +38,18 @@ public class FileNameFixer {
 	        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	        chooser.setMultiSelectionEnabled(false);
 
-	        JOptionPane.showMessageDialog(null, "Choose Input folder.");
+	        chooser.setDialogTitle("Choose Input folder.");
 	        if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
 	        atomic_in.set(chooser.getSelectedFile().toPath());
 
 	        
-	        JOptionPane.showMessageDialog(null, "Choose Output folder.");
-	        if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
+	        chooser.setDialogTitle("Choose Output folder.");
+	        if (chooser.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return;
 	        atomic_out.set(chooser.getSelectedFile().toPath());
 		});
 
 		Path inputDir = atomic_in.get(), outputDir = atomic_out.get();
+		if(inputDir == null || outputDir == null) return;
 		
         IOException e = Files.walk(inputDir).parallel().map(inputPath -> {
         	String in = inputDir.relativize(inputPath).toString();
